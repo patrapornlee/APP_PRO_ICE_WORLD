@@ -5,219 +5,25 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 
-public class Weather extends JApplet{
+public class Weather {
 	
 		private int MAX_X = Toolkit.getDefaultToolkit().getScreenSize().width;
 		private int MAX_Y = Toolkit.getDefaultToolkit().getScreenSize().height;
 		private LinkedList<Cloud> clouds;
 		private LinkedList<PieceOfWeather> rainDrops;
 		private LinkedList<PieceOfWeather> snowFlocons;
-		//private int NUMBER_FLOCONS;
 		private String weather;
 		private int delay;
-		private Image image;
-		private Graphics buffer;
+
 		
 		
 		public Weather () {
 			weather = "cloud";
-			this.setBackground(Color.BLUE);
 			generateClouds();
 			generateRain();
 			generateSnow();
 			delay= 40;
-			new AnimatorSnow ();
 			new WeatherChanging ();
-		}
-
-		/*public static void main(String[] args) {
-			// TODO Auto-generated method stub
-
-		}*/
-		
-		class PieceOfWeather {
-			private int VX;
-			private int VY;
-			private int x,y;
-			private int sizeFlocon;
-			
-			public PieceOfWeather (int x, int y , int VX, int VY){
-				this.x = x;
-				this.y = y;
-				this.VX = VX;
-				this.VY = VY;
-			}
-			
-			public PieceOfWeather (int x, int y , int VX, int VY, int sizeFlocon){
-				this.x = x;
-				this.y = y;
-				this.VX = VX;
-				this.VY = VY;
-				this.sizeFlocon = sizeFlocon;
-			}
-			
-			public int getX () {
-				return x;
-			}
-			
-			public int getY () {
-				return y;
-			}
-			
-			public void setX (int x) {
-				this.x =x;
-			}
-			
-			public void setY (int y) {
-				this.y =y;
-			}
-			
-			public int getVX () {
-				return VX;
-			}
-			
-			public int getVY () {
-				return VY;
-			}
-			
-			public void setVX (int VX) {
-				this.VX = VX;
-			}
-			
-			public void setVY (int VY) {
-				this.VY = VY;
-			}
-			
-			public int getSizeFlocon () {
-				return sizeFlocon;
-			}
-			
-			public void move () {
-				x=x+VX;
-				y=y+VY;
-				if (x>=MAX_X){
-					x=0;
-				}
-				else if (y>=MAX_Y){
-					y=0;
-				}
-				else if (x<0) {
-					x=MAX_X;
-				}
-			}
-		}
-		
-		class AnimatorSnow implements Runnable {
-			private Thread thread;
-
-			
-			public AnimatorSnow () {
-				thread = new Thread (this);
-				thread.start();
-			}
-			
-			public void run () {
-				while (true) {
-				try {
-					thread.sleep(delay);
-				}catch (InterruptedException e) {}
-				
-				repaint ();
-				}
-			}
-		}
-		
-		class WeatherChanging implements Runnable {
-			private Thread thread ;
-			
-			public WeatherChanging () {
-				thread = new Thread (this);
-				thread.start();
-			}
-			
-			public void run () {
-				while (true){
-					try {
-						thread.sleep(5000);
-					}catch (InterruptedException e){}
-					
-					if ("sun".equals(weather)) {
-						weather = "cloud";
-						delay = 40;
-						changeSpeedClouds(0.1);
-					}
-					
-					else if ("cloud".equals(weather)) {
-						weather = "rain";
-						changeCloudsColor (25,-3);
-					}
-					
-					else if ("rain".equals(weather) ){
-						weather = "snow";
-						changeCloudsColor (25,-3);
-					}
-					else if ("snow".equals(weather)) {
-						weather = "sun";
-						changeCloudsColor (25,6);
-						changeSpeedClouds(10);
-					}
-					
-				}
-			}
-		}
-		
-
-		
-		public void paint (Graphics g) {
-			
-			image= createImage(getSize().width,getSize().height);
-			buffer=image.getGraphics();
-			buffer.setColor(Color.WHITE);
-			
-			if ("sun".equals(weather)){
-				
-				for (Cloud c : clouds){
-					if (c.getX()<MAX_X && c.getX()>-700){
-						c.move();
-						c.paintCloud(buffer);
-					}
-				
-				}
-				g.drawImage(image, 0,0,this);
-			}
-			
-			else if ("cloud".equals(weather)){
-				
-				for (Cloud c : clouds){
-					c.move();
-					c.paintCloud(buffer);
-				}
-			g.drawImage(image, 0,0,this);
-			}
-			
-			else if ("rain".equals(weather)){
-				for (PieceOfWeather f : rainDrops){
-					f.move();
-					buffer.drawLine(f.getX(), f.getY(), f.getX(),f.getY() +10);	
-				}
-				for (Cloud c : clouds){
-					c.move();
-					c.paintCloud(buffer);
-				}
-			g.drawImage(image, 0,0,this);
-			}
-			
-			else if ("snow".equals(weather)) {
-				for (PieceOfWeather f : snowFlocons){
-					f.move();
-					buffer.fillOval(f.getX(),f.getY(), f.getSizeFlocon(), f.getSizeFlocon());	
-				}
-				for (Cloud c : clouds){
-					c.move();
-					c.paintCloud(buffer);
-				}
-			g.drawImage(image, 0,0,this);
-			}
 		}
 		
 		public void generateClouds () {
@@ -267,6 +73,104 @@ public class Weather extends JApplet{
 			}
 		}
 		
+		public LinkedList<Cloud> getClouds () {
+			return clouds;
+		}
+		
+		public LinkedList<PieceOfWeather> getRainDrops () {
+			return rainDrops;
+		}
+		
+		public LinkedList<PieceOfWeather> getSnowFlocons () {
+			return snowFlocons;
+		}
+		
+		public int getDelay () {
+			return delay;
+		}
+
+		public void paintWeather (Graphics buffer) {
+			if ("sun".equals(weather)){
+				
+				for (Cloud c : clouds){
+					if (c.getX()<MAX_X && c.getX()>-700){
+						c.move();
+						c.paintCloud(buffer);
+					}
+				
+				}
+			}
+			
+			else if ("cloud".equals(weather)){
+				
+				for (Cloud c : clouds){
+					c.move();
+					c.paintCloud(buffer);
+				}
+			}
+			
+			else if ("rain".equals(weather)){
+				for (PieceOfWeather f : rainDrops){
+					f.move();
+					buffer.drawLine(f.getX(), f.getY(), f.getX(),f.getY() +10);	
+				}
+				for (Cloud c : clouds){
+					c.move();
+					c.paintCloud(buffer);
+				}
+			}
+			
+			else if ("snow".equals(weather)) {
+				for (PieceOfWeather f : snowFlocons){
+					f.move();
+					buffer.fillOval(f.getX(),f.getY(), f.getSizeFlocon(), f.getSizeFlocon());	
+				}
+				for (Cloud c : clouds){
+					c.move();
+					c.paintCloud(buffer);
+				}
+			}
+		}
+		
+		class WeatherChanging implements Runnable {
+			private Thread thread ;
+			
+			public WeatherChanging () {
+				thread = new Thread (this);
+				thread.start();
+			}
+			
+			public void run () {
+				while (true){
+					try {
+						thread.sleep(5000);
+					}catch (InterruptedException e){}
+					
+					if ("sun".equals(weather)) {
+						weather = "cloud";
+						delay = 40;
+						changeSpeedClouds(0.1);
+					}
+					
+					else if ("cloud".equals(weather)) {
+						weather = "rain";
+						changeCloudsColor (25,-3);
+					}
+					
+					else if ("rain".equals(weather) ){
+						weather = "snow";
+						changeCloudsColor (25,-3);
+					}
+					else if ("snow".equals(weather)) {
+						weather = "sun";
+						changeCloudsColor (25,6);
+						changeSpeedClouds(10);
+					}
+					
+				}
+			}
+		}
+		
 		
 		class Cloud extends PieceOfWeather {
 			private Color colorCloud;
@@ -299,12 +203,9 @@ public class Weather extends JApplet{
 				if (getX()>=MAX_X){
 					setX(-700);
 				}				
-				
 				else if (getX()<-700) {
 					setX(MAX_X);
-				}
-				
-
+				}	
 			}
 
 			
@@ -341,7 +242,78 @@ public class Weather extends JApplet{
 				}
 			}
 			
-
+			
+			class PieceOfWeather {
+				private int VX;
+				private int VY;
+				private int x,y;
+				private int sizeFlocon;
+				
+				public PieceOfWeather (int x, int y , int VX, int VY){
+					this.x = x;
+					this.y = y;
+					this.VX = VX;
+					this.VY = VY;
+				}
+				
+				public PieceOfWeather (int x, int y , int VX, int VY, int sizeFlocon){
+					this.x = x;
+					this.y = y;
+					this.VX = VX;
+					this.VY = VY;
+					this.sizeFlocon = sizeFlocon;
+				}
+				
+				public int getX () {
+					return x;
+				}
+				
+				public int getY () {
+					return y;
+				}
+				
+				public void setX (int x) {
+					this.x =x;
+				}
+				
+				public void setY (int y) {
+					this.y =y;
+				}
+				
+				public int getVX () {
+					return VX;
+				}
+				
+				public int getVY () {
+					return VY;
+				}
+				
+				public void setVX (int VX) {
+					this.VX = VX;
+				}
+				
+				public void setVY (int VY) {
+					this.VY = VY;
+				}
+				
+				public int getSizeFlocon () {
+					return sizeFlocon;
+				}
+				
+				public void move () {
+					x=x+VX;
+					y=y+VY;
+					if (x>=MAX_X){
+						x=0;
+					}
+					else if (y>=MAX_Y){
+						y=0;
+					}
+					else if (x<0) {
+						x=MAX_X;
+					}
+				}
+			}
 			
 
 }
