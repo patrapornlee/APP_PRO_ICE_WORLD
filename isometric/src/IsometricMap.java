@@ -13,18 +13,25 @@ import javax.swing.*;
 
 public class IsometricMap extends JApplet  {
 	
-	private int MAX_X = Toolkit.getDefaultToolkit().getScreenSize().width;
-	private int MAX_Y = Toolkit.getDefaultToolkit().getScreenSize().height;
+	paintMiniMap paint ;
+	Graphics g;
+	
+//	private int MAX_X = Toolkit.getDefaultToolkit().getScreenSize().width;
+//	private int MAX_Y = Toolkit.getDefaultToolkit().getScreenSize().height;
 	IsometricSquare square ;
 	Point p;
 	Image image;
 	Graphics buffer;
+	Toolkit toolkit = Toolkit.getDefaultToolkit();
+	Dimension screensize = toolkit.getScreenSize();
   
+		public void init(){
 
+        	setSize(screensize);
+		}
         public IsometricMap() {
        
-        	this.setPreferredSize(new Dimension(MAX_X,MAX_Y));
-        
+
         	Refresh refresh = new Refresh();
         	refresh.start();
         }
@@ -48,13 +55,17 @@ public class IsometricMap extends JApplet  {
                 	}
                 }
                 g.drawImage(image, 0,0,this);
+
+            	paint = new paintMiniMap((int) Math.floor((Math.random()*100)+1),(int) Math.floor((Math.random()*100)+1));   			
+                paint.paintMiniMap(g);
+            	
            	}
         
         class Refresh extends Thread{
         	public void run(){
         		while(true){
 	        			try{
-	        				sleep(40);
+	        				sleep(20);
 	        			}catch(InterruptedException e){
 	        				
 	        			}
