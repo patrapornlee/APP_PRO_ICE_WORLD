@@ -7,12 +7,12 @@ import javax.swing.*;
 
 
 
-public class Paint extends JApplet {
+public class Paint extends JFrame {
 
 	private int MAX_X = Toolkit.getDefaultToolkit().getScreenSize().width;
 	private int MAX_Y = Toolkit.getDefaultToolkit().getScreenSize().height;
 	private int TALK_VISIBLE_DURATION = 5000;
-	private BufferedImage image;
+	private Image image;
 	private Graphics buffer;
 	private Walking walking;
 	private Weather weather;
@@ -20,25 +20,39 @@ public class Paint extends JApplet {
 	private Yelling yelling;
 	private IsometricMap isometricMap;
 	
+	
+	public static void main (String [] args){
+		Paint paint = new Paint ();
+		paint.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		paint.setVisible(true);
+	}
+	
 	public Paint () {
 
+		
 		walking = new Walking ();
 		addMouseListener (walking);
 		isometricMap = new IsometricMap ();
 		weather = new Weather ();
 		talking = new Talking ("prout prout prout", TALK_VISIBLE_DURATION);
 		yelling = new Yelling ("WHAT THE FUCK");
-		this.setBackground(Color.BLUE);
+		isometricMap = new IsometricMap();
+		addMouseListener(isometricMap);
+		addMouseMotionListener(isometricMap);
+		addMouseWheelListener(isometricMap);
+		this.setBackground(Color.WHITE);
+		changeCursor("sword.gif");
 		new Animator ();
-		new Music ("fat.au");
+		new Music ("music.wav");
 
 	}
 	
 	public void paint (Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		image= new BufferedImage(getSize().width,getSize().height,BufferedImage.TYPE_INT_RGB);
+		
+		image= createImage(getSize().width,getSize().height);
 		buffer=image.getGraphics();
-		isometricMap.paintMap(buffer);
+		
+		isometricMap.paintMap(buffer,getWidth(),getHeight());
 		walking.paintWalking(buffer);
 		buffer.setColor(Color.WHITE);
 		
@@ -46,10 +60,15 @@ public class Paint extends JApplet {
 		
 		talking.paintTalking (buffer, walking.getCharPositionX(), walking.getCharPositionY());
 		yelling.paintYelling(buffer);
-		AffineTransform transformationZoom = AffineTransform.getScaleInstance(1f, 1f);
-		//image = image.getScaledInstance(MAX_X, MAX_Y, 10);
-		g2.drawImage(image, transformationZoom,this);
+		g.drawImage(image,0,0,this);
 		
+	}
+	
+	public void changeCursor (String cursorFile) {
+		  Toolkit toolkit = Toolkit.getDefaultToolkit();
+		  Image image = toolkit.getImage(cursorFile);
+		  Cursor c = toolkit.createCustomCursor(image , new Point(getX(),getY()), "img");
+		  setCursor (c);
 	}
 	
 	class Animator implements Runnable {
@@ -64,7 +83,7 @@ public class Paint extends JApplet {
 		public void run () {
 			while (true) {
 			try {
-				thread.sleep(weather.getDelay());
+				thread.sleep(10);
 			}catch (InterruptedException e) {}
 			
 			repaint ();
