@@ -1,5 +1,7 @@
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -23,16 +25,31 @@ public class Paint extends JFrame {
 	
 	public static void main (String [] args){
 		Paint paint = new Paint ();
-        JFrame mainFrame = new JFrame();
-
-		paint.setVisible(true);
+        paint.setVisible(true);
         paint.setDefaultCloseOperation(EXIT_ON_CLOSE);
         paint.setSize(1280,720);
 	}
-	
-	public Paint () {
 
-		
+    private void setGUI() {
+        //talk panel
+        JPanel talkPanel = new JPanel();
+        final JTextField talkLabel = new JTextField();
+        JButton submitTalk = new JButton("Submit Talk");
+        submitTalk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String sentence = talkLabel.getText();
+                new Talking(sentence, TALK_VISIBLE_DURATION);
+            }
+        });
+        talkPanel.add(talkLabel);
+        talkPanel.add(submitTalk);
+        add(talkPanel,BorderLayout.SOUTH);
+    }
+
+    public Paint () {
+        setLayout(new BorderLayout());
+        setGUI();
 		walking = new Walking ();
 		addMouseListener (walking);
 		isometricMap = new IsometricMap ();
