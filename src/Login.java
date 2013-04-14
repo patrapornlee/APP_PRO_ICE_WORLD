@@ -265,11 +265,15 @@ public class Login extends JFrame {
                         if(loginSuccess){
                             info.setForeground(Color.BLACK);
                             info.setText("Logged-in as ICE-TIZEN");
-                            immigration.walk(10,90);
-                            immigration.walk(90,10);
-                            currentUser.setNumberTries(0);
-                            users.add(currentUser);
+//                            immigration.walk(10,90);
+//                            immigration.walk(90,10);
+//                            currentUser.setNumberTries(0);
+//                            users.add(currentUser);
                             setVisible(false);
+                            Paint mainMap = new Paint();
+
+                            mainMap.setVisible(true);
+
                         }
 						//}
 
@@ -305,7 +309,7 @@ public class Login extends JFrame {
 			
 			if (temp == guestLogIn ){
 				info.setForeground(Color.BLACK);
-				info.setText("Loged-in as ALIEN");
+				info.setText("Logged-in as ALIEN");
 			}
 			
 			if (temp == yes) {

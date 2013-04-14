@@ -40,7 +40,7 @@ public void paintYelling (Graphics g) {
 class DisplayBubble extends Thread {
 	public void run (){
 		try {
-			sleep (10000);
+			sleep (5000);
 		} catch (InterruptedException e) {}
 		display = false;
 	}
