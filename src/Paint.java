@@ -23,8 +23,11 @@ public class Paint extends JFrame {
 	
 	public static void main (String [] args){
 		Paint paint = new Paint ();
-		paint.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        JFrame mainFrame = new JFrame();
+
 		paint.setVisible(true);
+        paint.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        paint.setSize(1280,720);
 	}
 	
 	public Paint () {

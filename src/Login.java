@@ -270,9 +270,12 @@ public class Login extends JFrame {
 //                            currentUser.setNumberTries(0);
 //                            users.add(currentUser);
                             setVisible(false);
-                            Paint mainMap = new Paint();
+                            Paint mainFrame = new Paint();
+                            mainFrame.setVisible(true);
+                            mainFrame.setSize(new Dimension(1280,720));
+                            mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-                            mainMap.setVisible(true);
+
 
                         }
 						//}
